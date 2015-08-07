@@ -18,13 +18,36 @@ class Card
     :ace => 14
   }
 
+  SUIT_STRINGS = {
+    :clubs    => "♣",
+    :diamonds => "♦",
+    :hearts   => "♥",
+    :spades   => "♠"
+  }
+
   def initialize(value, suit)
     @value = value
     @suit = suit
   end
 
+  def self.values
+    POKER_VALUES.keys
+  end
+
+  def self.suits
+    SUIT_STRINGS.keys
+  end
+
   def poker_value
     POKER_VALUES[value]
   end
-  
+
+  def same_suit?(other_card)
+    suit == other_card.suit
+  end
+
+  def same_value?(other_card)
+    value == other_card.value
+  end
+
 end
