@@ -28,4 +28,14 @@ class Hand
     false
   end
 
+  def flush?
+    suit = cards.first.suit
+    cards.all? { |card| card.suit == suit }
+  end
+
+  def full_house?
+    num_pairs == 1 && has_trips?
+  end
+
+
 end
