@@ -50,4 +50,6 @@ class Card
     value == other_card.value
   end
 
+  
+
 end
