@@ -55,11 +55,22 @@ class Hand
     return 3 if has_trips?
     return 2 if num_pairs == 2
     return 1 if num_pairs == 1
-    0
+    return 0
   end
 
   def beats?(other_hand)
-    hand_value > other_hand.hand_value
+    case hand_value <=> other_hand.hand_value
+    when 1
+      true
+    when -1
+      false
+    when 0
+      tie_breaker(other_hand)
+    end
+  end
+
+  def tie_breaker(other_hand)
+
   end
 
 
