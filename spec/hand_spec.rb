@@ -204,23 +204,43 @@ describe Hand do
         expect(hand.value).to eq({ :rank => 5, :made_cards => [2,3,4,5,10] })
       end
       
-      it "returns #value"
+      it "returns #value" do
+        hand = Hand.new([h2, h3, h4, h5, h10])
+        
+        expect(hand.find_flush).to eq({ :rank => 5, :made_cards => [2,3,4,5,10] })
+      end
     end
     
     context "when a flush is not found" do
-      it "returns nil" 
+      it "returns nil" do
+          hand = Hand.new([h4, h5, h6, h10, sa])
+          
+          expect(hand.find_pairs(:two_pair)).to be(nil)
+      end
     end
   end
   
   describe "#find_straight_flush" do 
     
     context "when a straight flush is found" do
-      it "sets #value"
-      it "returns #value"
+      it "sets #value"  do
+        hand = Hand.new([h2, h3, h4, h5, h6])
+        hand.find_straight_flush  
+        expect(hand.value).to eq({ :rank => 8, :made_cards => [2,3,4,5,6] })
+      end
+      it "returns #value"  do
+        hand = Hand.new([h2, h3, h4, h5, h6])
+         
+        expect(hand.find_straight_flush ).to eq({ :rank => 8, :made_cards => [2,3,4,5,6] })
+      end
     end
     
     context "when a straight flush is not found" do
-      it "returns nil" 
+      it "returns nil" do
+        hand = Hand.new([h2, h3, h4, h5, h10])
+         
+        expect(hand.find_straight_flush ).to be(nil) 
+      end
     end
   end
   

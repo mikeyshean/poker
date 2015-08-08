@@ -69,6 +69,12 @@ class Hand
     made_hand = cards.map(&:poker_value).sort
     set_value(:flush, made_hand)
   end
+  
+  def find_straight_flush
+    return nil unless find_flush && find_straight
+    made_hand = cards.map(&:poker_value).sort
+    set_value(:straight_flush, made_hand)
+  end
 
 
   def set_value(rank, made_cards = self.cards)
@@ -87,7 +93,7 @@ class Hand
       self.value[:made_cards] = pair_value
       self.value[:kicker_cards] = cards.map(&:poker_value)
       .find { |value| !pair_value.include?(value)}
-    when :straight, :flush
+    when :straight, :flush, :straight_flush
       self.value[:rank] = HAND_RANK[rank]
       self.value[:made_cards] = made_cards
     end
