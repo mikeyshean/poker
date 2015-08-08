@@ -51,6 +51,13 @@ class Hand
     return nil unless quads.count == 1
     set_value(:quads, quads)
   end
+  
+  def find_full_house
+    return nil unless find_pairs(:pair) && find_trips
+    self.value[:rank] = HAND_RANK[:full_house]
+    value
+  end
+    
 
   def find_straight
     card_values = cards.map(&:poker_value).sort
@@ -113,4 +120,3 @@ class Hand
 
 
 end
-#

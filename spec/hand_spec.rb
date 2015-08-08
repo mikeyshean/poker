@@ -1,7 +1,7 @@
 require 'hand'
 
 describe Hand do
-  
+
   let(:sa)  { double(:card, :value => :ace,   :suit => :spades, :poker_value => 14) }
   let(:h2)  { double(:card, :value => :two,   :suit => :hearts, :poker_value => 2)  }
   let(:h3)  { double(:card, :value => :three, :suit => :hearts, :poker_value => 3)  }
@@ -27,6 +27,7 @@ describe Hand do
       expect(hand.cards).to eq([card1, card2])
     end
   end
+
 
   describe '#find_pairs(rank)' do
    describe "can look for ONE pair" do  
@@ -234,6 +235,37 @@ describe Hand do
           hand = Hand.new([h4, h5, h6, h10, sa])
           
           expect(hand.find_pairs(:two_pair)).to be(nil)
+      end
+    end
+  end
+  
+  describe "#find_full_house" do 
+    
+    context "when a full house is found" do
+      it "sets #value" do
+        hand = Hand.new([h3, h3, h3, h5, h5])
+        hand.find_full_house
+        expect(hand.value).to eq({ 
+          :rank => 6, 
+          :made_cards => [3],
+          :kicker_cards => [5,5] })
+      end
+      
+      it "returns #value" do
+        hand = Hand.new([h3, h3, h3, h5, h5])
+        
+        expect(hand.find_full_house).to eq({ 
+          :rank => 6, 
+          :made_cards => [3],
+          :kicker_cards => [5,5] })
+      end
+    end
+    
+    context "when a full house is not found" do
+      it "returns nil" do
+          hand = Hand.new([h4, h5, h6, h10, sa])
+          
+          expect(hand.find_full_house).to be(nil)
       end
     end
   end
