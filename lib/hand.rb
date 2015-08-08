@@ -21,7 +21,18 @@ class Hand
     @cards = cards
     @value = {}
   end
-
+  
+  def evaluate_hand
+    find_straight_flush ||
+    find_quads ||
+    find_full_house ||
+    find_flush ||
+    find_straight ||
+    find_trips ||
+    find_pairs(:two_pair) ||
+    find_pairs(:pair) 
+  end
+    
   def find_pairs(rank)
     card_count = Hash.new { |h,k| h[k] = 0 }
 

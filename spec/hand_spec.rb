@@ -300,5 +300,15 @@ describe Hand do
     end
   end
   
-
+  describe "#evaluate_hand" do
+    it "identifies poker hand and sets #value" do
+      hand = Hand.new([h2, h3, h4, h5, h10])
+      hand.evaluate_hand
+      expect(hand.value).to eq({ 
+        :rank => 5, 
+        :made_cards => [2,3,4,5,10],
+        :kicker_cards => nil })
+    end    
+  end
+ 
 end
