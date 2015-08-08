@@ -16,6 +16,10 @@ class Hand
   }
 
   ACE_LOW = [1,2,3,4,5]
+  
+  def self.deal_from(deck)
+    Hand.new(deck.take(5))
+  end
 
   def initialize(cards = [])
     @cards = cards
@@ -32,7 +36,7 @@ class Hand
     find_pairs(:two_pair) ||
     find_pairs(:pair) 
   end
-    
+  
   def find_pairs(rank)
     card_count = Hash.new { |h,k| h[k] = 0 }
 
@@ -152,7 +156,6 @@ class Hand
     end
     nil
   end
-
   
   def made_cards
     value[:made_cards].reverse
@@ -161,7 +164,5 @@ class Hand
   def kicker_cards
     value[:kicker_cards].reverse
   end
-
-
-
+  
 end

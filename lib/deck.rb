@@ -21,7 +21,7 @@ class Deck
   end
 
   def take(n)
-    cards.pop(n)
+    cards.shift(n)
   end
 
   def shuffle

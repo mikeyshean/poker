@@ -14,15 +14,26 @@ describe Hand do
   let(:hq)  { double(:card, :value => :queen, :suit => :hearts, :poker_value => 12) }
   let(:sk)  { double(:card, :value => :king,  :suit => :spades, :poker_value => 13) }
   
-
   subject(:straight_flush) { Hand.new([h2, h3, h4, h5, h6]) }
-  subject(:flush) { Hand.new([h2, h3, h4, h5, hq]) }
-  subject(:straight) { Hand.new([h2, h3, h4, h5, hq]) }
-  subject(:quads) { Hand.new([h5, h5, h5, h5, hj]) }
-  subject(:trips) { Hand.new([h4, h4, h4, h5, sa]) }
-  subject(:two_pair) { Hand.new([h4, h4, h5, h5, sa]) }
-  subject(:pair) {Hand.new([h4, h4, h5, h6, sa])}
+  subject(:flush)          { Hand.new([h2, h3, h4, h5, hq]) }
+  subject(:straight)       { Hand.new([h2, h3, h4, h5, hq]) }
+  subject(:quads)          { Hand.new([h5, h5, h5, h5, hj]) }
+  subject(:trips)          { Hand.new([h4, h4, h4, h5, sa]) }
+  subject(:two_pair)       { Hand.new([h4, h4, h5, h5, sa]) }
+  subject(:pair)           {Hand.new([h4, h4, h5, h6, sa])}
 
+  describe "::deal_from" do
+    it "deals a hand of 5 cards" do
+      deck_cards = [sa, h2, h3, h4, h5]
+      deck = double("deck")
+      
+      expect(deck).to receive(:take).with(5).and_return(deck_cards) 
+      hand = Hand.deal_from(deck)
+      
+      expect(hand.cards).to match_array(deck_cards)
+    end
+  end
+  
   describe "#cards" do
     it "returns an array of cards" do
       hand = Hand.new
