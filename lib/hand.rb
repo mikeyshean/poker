@@ -26,7 +26,7 @@ class Hand
     card_count = Hash.new { |h,k| h[k] = 0 }
 
     cards.each { |card| card_count[card.poker_value] += 1 }
-    pairs = card_count.select { |_, count| count == 2 }
+    pairs = card_count.select { |_, count| count == 2 }.keys.uniq
 
     return nil unless pairs.count == HAND_RANK[rank]
     set_value(rank, pairs)
@@ -36,7 +36,7 @@ class Hand
     card_count = Hash.new { |h,k| h[k] = 0 }
 
     cards.each { |card| card_count[card.poker_value] += 1 }
-    trips = card_count.select { |_, count| count == 3 }
+    trips = card_count.select { |_, count| count == 3 }.keys.uniq
 
     return nil unless trips.count == 1
     set_value(:trips, trips)
@@ -46,7 +46,7 @@ class Hand
     card_count = Hash.new { |h,k| h[k] = 0 }
 
     cards.each { |card| card_count[card.poker_value] += 1 }
-    quads = card_count.select { |_, count| count == 4 }
+    quads = card_count.select { |_, count| count == 4 }.keys.uniq
 
     return nil unless quads.count == 1
     set_value(:quads, quads)
@@ -77,30 +77,21 @@ class Hand
   end
 
 
-  def set_value(rank, made_cards = self.cards)
+  def set_value(rank, made_cards)
     case rank
     when :pair, :trips, :quads
-      made_cards_value = made_cards.keys[0]
-
-      self.value[:rank] = HAND_RANK[rank]
-      self.value[:made_cards] = [made_cards_value]
-      self.value[:kicker_cards] = cards.map(&:poker_value)
-      .reject { |value| value == made_cards_value}
+      kickers = cards.map(&:poker_value)
+      .reject { |value| value == made_cards[0]}
     when :two_pair
-      pair_value = made_cards.keys
-
-      self.value[:rank] = HAND_RANK[rank]
-      self.value[:made_cards] = pair_value
-      self.value[:kicker_cards] = cards.map(&:poker_value)
-      .find { |value| !pair_value.include?(value)}
-    when :straight, :flush, :straight_flush
-      self.value[:rank] = HAND_RANK[rank]
-      self.value[:made_cards] = made_cards
+      kickers = cards.map(&:poker_value)
+      .find { |value| !made_cards.include?(value)}
     end
+    
+    self.value[:rank] = HAND_RANK[rank]
+    self.value[:made_cards] = made_cards
+    self.value[:kicker_cards] = kickers
     self.value
   end
-
-
 
 
 

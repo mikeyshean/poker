@@ -166,22 +166,34 @@ describe Hand do
       it "sets #value" do
         hand = Hand.new([h2, h3, h4, h5, h6])
         hand.find_straight  
-        expect(hand.value).to eq({ :rank => 4, :made_cards => [2,3,4,5,6] })
+        expect(hand.value).to eq({ 
+          :rank => 4, 
+          :made_cards => [2,3,4,5,6],
+          :kicker_cards => nil })
       end
       
       it "returns #value" do
         hand = Hand.new([h2, h3, h4, h5, h6])
-        expect(hand.find_straight).to eq({ :rank => 4, :made_cards => [2,3,4,5,6] })
+        expect(hand.find_straight).to eq({ 
+          :rank => 4, 
+          :made_cards => [2,3,4,5,6],
+          :kicker_cards => nil })
       end
       
       it "can be ace-high" do
         hand = Hand.new([h2, h3, h4, h5, sa])
-        expect(hand.find_straight).to eq({ :rank => 4, :made_cards => [1,2,3,4,5] })
+        expect(hand.find_straight).to eq({ 
+          :rank => 4, 
+          :made_cards => [1,2,3,4,5],
+          :kicker_cards => nil })
       end
       
       it "can be ace-low" do
         hand = Hand.new([h10, hj, hq, sk, sa])
-        expect(hand.find_straight).to eq({ :rank => 4, :made_cards => [10,11,12,13,14] })
+        expect(hand.find_straight).to eq({ 
+          :rank => 4, 
+          :made_cards => [10,11,12,13,14],
+          :kicker_cards => nil })
       end
       
     end
@@ -201,13 +213,19 @@ describe Hand do
       it "sets #value" do
         hand = Hand.new([h2, h3, h4, h5, h10])
         hand.find_flush  
-        expect(hand.value).to eq({ :rank => 5, :made_cards => [2,3,4,5,10] })
+        expect(hand.value).to eq({ 
+          :rank => 5, 
+          :made_cards => [2,3,4,5,10],
+          :kicker_cards => nil })
       end
       
       it "returns #value" do
         hand = Hand.new([h2, h3, h4, h5, h10])
         
-        expect(hand.find_flush).to eq({ :rank => 5, :made_cards => [2,3,4,5,10] })
+        expect(hand.find_flush).to eq({ 
+          :rank => 5, 
+          :made_cards => [2,3,4,5,10],
+          :kicker_cards => nil})
       end
     end
     
@@ -226,12 +244,18 @@ describe Hand do
       it "sets #value"  do
         hand = Hand.new([h2, h3, h4, h5, h6])
         hand.find_straight_flush  
-        expect(hand.value).to eq({ :rank => 8, :made_cards => [2,3,4,5,6] })
+        expect(hand.value).to eq({ 
+          :rank => 8, 
+          :made_cards => [2,3,4,5,6],
+          :kicker_cards => nil })
       end
       it "returns #value"  do
         hand = Hand.new([h2, h3, h4, h5, h6])
          
-        expect(hand.find_straight_flush ).to eq({ :rank => 8, :made_cards => [2,3,4,5,6] })
+        expect(hand.find_straight_flush ).to eq({ 
+          :rank => 8, 
+          :made_cards => [2,3,4,5,6],
+          :kicker_cards => nil })
       end
     end
     
