@@ -30,7 +30,6 @@ class Hand
 
     return nil unless pairs.count == HAND_RANK[rank]
     set_value(rank, pairs)
-    self.value
   end
 
   def find_trips
@@ -41,7 +40,6 @@ class Hand
 
     return nil unless trips.count == 1
     set_value(:trips, trips)
-    self.value
   end
 
   def find_quads
@@ -52,7 +50,6 @@ class Hand
 
     return nil unless quads.count == 1
     set_value(:quads, quads)
-    self.value
   end
 
   def find_straight
@@ -65,8 +62,12 @@ class Hand
     else
       return nil
     end
-
-    self.value
+  end
+  
+  def find_flush
+    return nil unless cards.map(&:suit).uniq.length == 1
+    made_hand = cards.map(&:poker_value).sort
+    set_value(:flush, made_hand)
   end
 
 
@@ -86,10 +87,11 @@ class Hand
       self.value[:made_cards] = pair_value
       self.value[:kicker_cards] = cards.map(&:poker_value)
       .find { |value| !pair_value.include?(value)}
-    when :straight
+    when :straight, :flush
       self.value[:rank] = HAND_RANK[rank]
       self.value[:made_cards] = made_cards
     end
+    self.value
   end
 
 

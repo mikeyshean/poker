@@ -198,7 +198,12 @@ describe Hand do
   describe "#find_flush" do 
     
     context "when a flush is found" do
-      it "sets #value"
+      it "sets #value" do
+        hand = Hand.new([h2, h3, h4, h5, h10])
+        hand.find_flush  
+        expect(hand.value).to eq({ :rank => 5, :made_cards => [2,3,4,5,10] })
+      end
+      
       it "returns #value"
     end
     
