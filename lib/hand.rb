@@ -114,18 +114,52 @@ class Hand
 
 
   def beats?(other_hand)
-    case hand_value <=> other_hand.hand_value
-    when 1
-      true
+    evaluate_hand
+    other_hand.evaluate_hand
+    case value[:rank] <=> other_hand.value[:rank]
     when -1
       false
     when 0
       tie_breaker(other_hand)
+    when 1
+      true
     end
   end
 
   def tie_breaker(other_hand)
+    return nil if value.keys.all? { |key| value[key] == other_hand.value[key] }
+    
+    made_cards.count.times do |pos|
+      case made_cards[pos] <=> other_hand.made_cards[pos]
+      when -1
+        return false
+      when 0
+        next
+      when 1
+       return true
+      end
+    end
+    
+    kicker_cards.count.times do |pos|
+      case kicker_cards[pos] <=> other_hand.kicker_cards[pos]
+      when -1
+        return false
+      when 0
+        next
+      when 1
+       return true
+      end
+    end
+    nil
+  end
 
+  
+  def made_cards
+    value[:made_cards].reverse
+  end
+  
+  def kicker_cards
+    value[:kicker_cards].reverse
   end
 
 

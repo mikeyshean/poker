@@ -13,6 +13,15 @@ describe Hand do
   let(:hj)  { double(:card, :value => :jack,  :suit => :hearts, :poker_value => 11) }
   let(:hq)  { double(:card, :value => :queen, :suit => :hearts, :poker_value => 12) }
   let(:sk)  { double(:card, :value => :king,  :suit => :spades, :poker_value => 13) }
+  
+
+  subject(:straight_flush) { Hand.new([h2, h3, h4, h5, h6]) }
+  subject(:flush) { Hand.new([h2, h3, h4, h5, hq]) }
+  subject(:straight) { Hand.new([h2, h3, h4, h5, hq]) }
+  subject(:quads) { Hand.new([h5, h5, h5, h5, hj]) }
+  subject(:trips) { Hand.new([h4, h4, h4, h5, sa]) }
+  subject(:two_pair) { Hand.new([h4, h4, h5, h5, sa]) }
+  subject(:pair) {Hand.new([h4, h4, h5, h6, sa])}
 
   describe "#cards" do
     it "returns an array of cards" do
@@ -34,26 +43,24 @@ describe Hand do
       context "when a pair is found" do
         
         it "sets #value" do
-          hand = Hand.new([h4, h4, h5, h6, h10])
-          hand.find_pairs(:pair)
-          expect(hand.value).to eq({ :rank => 1, 
-                                     :made_cards => [4], 
-                                     :kicker_cards => [5, 6, 10] })
+          pair.find_pairs(:pair)
+          expect(pair.value).to eq({ 
+            :rank => 1, 
+            :made_cards => [4], 
+            :kicker_cards => [5, 6, 14] })
         end
         
         it "returns #value" do
-          hand = Hand.new([h4, h4, h5, h6, h10])
-          expect(hand.find_pairs(:pair)).to eq({ :rank => 1, 
-                                     :made_cards => [4], 
-                                     :kicker_cards => [5, 6, 10] })
+          expect(pair.find_pairs(:pair)).to eq({ 
+            :rank => 1, 
+            :made_cards => [4], 
+            :kicker_cards => [5, 6, 14] })
         end
       end
       
       context "when no pair is found" do
-        
         it "returns nil" do
           hand = Hand.new([h4, h5, h6, h10, hj])
-          
           expect(hand.find_pairs(:pair)).to be(nil)
         end
       end
@@ -61,33 +68,26 @@ describe Hand do
   
   
     describe 'can look for TWO pairs' do
-      
      context "when two pair is found" do
-       
         it "sets #value" do
-          hand = Hand.new([h4, h4, h5, h5, h10])
-          hand.find_pairs(:two_pair)
-          expect(hand.value).to eq({
+          two_pair.find_pairs(:two_pair)
+          expect(two_pair.value).to eq({
             :rank => 2, 
             :made_cards => [4, 5], 
-            :kicker_cards => 10 })
+            :kicker_cards => 14 })
         end
         
         it "returns #value" do
-          hand = Hand.new([h4, h4, h5, h5, h10])
-          expect(hand.find_pairs(:two_pair)).to eq({ 
+          expect(two_pair.find_pairs(:two_pair)).to eq({ 
             :rank => 2, 
             :made_cards => [4, 5], 
-            :kicker_cards => 10 })
+            :kicker_cards => 14 })
         end
       end
       
       context "when two pair is not found" do
-        
         it "returns nil" do
-          hand = Hand.new([h4, h5, h6, h10, hj])
-          
-          expect(hand.find_pairs(:two_pair)).to be(nil)
+          expect(straight.find_pairs(:two_pair)).to be(nil)
         end
       end
   
@@ -95,42 +95,33 @@ describe Hand do
   end
   
   describe "#find_trips" do
-    
     context "when trips are found" do
-      
       it "sets #value" do
-        hand = Hand.new([h4, h4, h4, h5, h10])
-        hand.find_trips
-        expect(hand.value).to eq({ 
+        trips.find_trips
+        expect(trips.value).to eq({ 
           :rank => 3, 
           :made_cards => [4], 
-          :kicker_cards => [5, 10] 
-                                  })
+          :kicker_cards => [5, 14] })
         end
+        
       it "returns #value" do
-        hand = Hand.new([h4, h4, h4, h5, h10])
-     
-        expect(hand.find_trips).to eq({ 
+        expect(trips.find_trips).to eq({ 
           :rank => 3, 
           :made_cards => [4], 
-          :kicker_cards => [5, 10] })
+          :kicker_cards => [5, 14] })
        end
     end
     
     context "when trips are not found" do
-      
       it "returns nil" do
         hand = Hand.new([h4, h5, h6, h10, hj])
-          
         expect(hand.find_trips).to be(nil)
       end
     end
   end
   
   describe "#find_quads" do 
-    
     context "when quads are found" do
-      
       it "sets #value" do
         hand = Hand.new([h5, h5, h5, h5, hj])
         hand.find_quads  
@@ -142,7 +133,6 @@ describe Hand do
       
       it "returns #value" do
         hand = Hand.new([h5, h5, h5, h5, hj])
-          
         expect(hand.find_quads).to eq({ 
           :rank => 7, 
           :made_cards => [5], 
@@ -151,19 +141,15 @@ describe Hand do
     end
     
     context "when quads are not found" do
-      
       it "returns nil" do
         hand = Hand.new([h4, h5, h6, h10, hj])
-          
         expect(hand.find_quads).to be(nil) 
       end
     end
   end
 
   describe "#find_straight" do 
-    
     context "when a straight is found" do
-      
       it "sets #value" do
         hand = Hand.new([h2, h3, h4, h5, h6])
         hand.find_straight  
@@ -202,14 +188,12 @@ describe Hand do
     context "when a straight is not found" do
       it "returns nil" do
         hand = Hand.new([h4, h5, h6, h10, hj])
-          
         expect(hand.find_straight).to be(nil) 
       end
     end
   end
   
   describe "#find_flush" do 
-    
     context "when a flush is found" do
       it "sets #value" do
         hand = Hand.new([h2, h3, h4, h5, h10])
@@ -222,7 +206,6 @@ describe Hand do
       
       it "returns #value" do
         hand = Hand.new([h2, h3, h4, h5, h10])
-        
         expect(hand.find_flush).to eq({ 
           :rank => 5, 
           :made_cards => [2,3,4,5,10],
@@ -232,15 +215,13 @@ describe Hand do
     
     context "when a flush is not found" do
       it "returns nil" do
-          hand = Hand.new([h4, h5, h6, h10, sa])
-          
-          expect(hand.find_pairs(:two_pair)).to be(nil)
+        hand = Hand.new([h4, h5, h6, h10, sa])
+        expect(hand.find_pairs(:two_pair)).to be(nil)
       end
     end
   end
   
   describe "#find_full_house" do 
-    
     context "when a full house is found" do
       it "sets #value" do
         hand = Hand.new([h3, h3, h3, h5, h5])
@@ -253,7 +234,6 @@ describe Hand do
       
       it "returns #value" do
         hand = Hand.new([h3, h3, h3, h5, h5])
-        
         expect(hand.find_full_house).to eq({ 
           :rank => 6, 
           :made_cards => [3],
@@ -264,14 +244,12 @@ describe Hand do
     context "when a full house is not found" do
       it "returns nil" do
           hand = Hand.new([h4, h5, h6, h10, sa])
-          
           expect(hand.find_full_house).to be(nil)
       end
     end
   end
   
   describe "#find_straight_flush" do 
-    
     context "when a straight flush is found" do
       it "sets #value"  do
         hand = Hand.new([h2, h3, h4, h5, h6])
@@ -281,9 +259,9 @@ describe Hand do
           :made_cards => [2,3,4,5,6],
           :kicker_cards => nil })
       end
+      
       it "returns #value"  do
         hand = Hand.new([h2, h3, h4, h5, h6])
-         
         expect(hand.find_straight_flush ).to eq({ 
           :rank => 8, 
           :made_cards => [2,3,4,5,6],
@@ -294,7 +272,6 @@ describe Hand do
     context "when a straight flush is not found" do
       it "returns nil" do
         hand = Hand.new([h2, h3, h4, h5, h10])
-         
         expect(hand.find_straight_flush ).to be(nil) 
       end
     end
@@ -302,13 +279,38 @@ describe Hand do
   
   describe "#evaluate_hand" do
     it "identifies poker hand and sets #value" do
-      hand = Hand.new([h2, h3, h4, h5, h10])
-      hand.evaluate_hand
-      expect(hand.value).to eq({ 
+      flush.evaluate_hand
+      expect(flush.value).to eq({ 
         :rank => 5, 
-        :made_cards => [2,3,4,5,10],
+        :made_cards => [2,3,4,5,12],
         :kicker_cards => nil })
     end    
   end
- 
+  
+  describe "#beats?(other_hand)" do
+    context "flush vs. two pair" do
+      it "returns true" do
+        two_pair = Hand.new([h4, h4, h4, h5, sa])
+        expect(flush.beats?(two_pair)).to be_truthy
+      end
+    end
+      
+    describe "pair vs. pair" do
+      context "evaluates pairs first" do
+        it "pair of 4's beats pair of 2's" do
+          twos = Hand.new([h2, h2, h5, h6, sa])
+          expect(pair.beats?(twos)).to be_truthy
+        end
+      end
+      
+      
+      context "evaluates kickers if pairs are the same" do
+        it "pair of 2's with Ace kicker beats pair of 2's with King kicker" do
+          twos_ace = Hand.new([h2, h2, h5, h6, sa])
+          twos_king = Hand.new([h2, h2, h5, h6, sk])
+          expect(twos_ace.beats?(twos_king)).to be_truthy
+        end
+      end
+    end
+  end
 end
