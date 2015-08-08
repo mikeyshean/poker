@@ -28,12 +28,8 @@ class Hand
     cards.each { |card| pairs[card.poker_value] += 1 }
     pairs = pairs.select { |_, card_count| card_count == 2 }
 
-    if pairs.count == HAND_RANK[rank]
-      set_value(rank, pairs)
-    else
-      return nil
-    end
-
+    return nil unless pairs.count == HAND_RANK[rank]
+    set_value(rank, pairs)
     self.value
   end
 
@@ -43,12 +39,8 @@ class Hand
     cards.each { |card| trips[card.poker_value] += 1 }
     trips = trips.select { |_, card_count| card_count == 3 }
 
-    if trips.count == 1
-      set_value(:trips, trips)
-    else
-      return nil
-    end
-
+    return nil unless trips.count == 1
+    set_value(:trips, trips)
     self.value
   end
 
@@ -58,12 +50,8 @@ class Hand
     cards.each { |card| quads[card.poker_value] += 1 }
     quads = quads.select { |_, card_count| card_count == 4 }
 
-    if quads.count == 1
-      set_value(:quads, quads)
-    else
-      return nil
-    end
-
+    return nil unless quads.count == 1
+    set_value(:quads, quads)
     self.value
   end
 
