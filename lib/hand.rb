@@ -14,7 +14,7 @@ class Hand
     :pair           => 1,
     :high_card      => 0
   }
-  
+
   ACE_LOW = [1,2,3,4,5]
 
   def initialize(cards = [])
@@ -23,10 +23,10 @@ class Hand
   end
 
   def find_pairs(rank)
-    pairs = Hash.new { |h,k| h[k] = 0 }
+    card_count = Hash.new { |h,k| h[k] = 0 }
 
-    cards.each { |card| pairs[card.poker_value] += 1 }
-    pairs = pairs.select { |_, card_count| card_count == 2 }
+    cards.each { |card| card_count[card.poker_value] += 1 }
+    pairs = card_count.select { |_, count| count == 2 }
 
     return nil unless pairs.count == HAND_RANK[rank]
     set_value(rank, pairs)
@@ -34,10 +34,10 @@ class Hand
   end
 
   def find_trips
-    trips = Hash.new { |h,k| h[k] = 0 }
+    card_count = Hash.new { |h,k| h[k] = 0 }
 
-    cards.each { |card| trips[card.poker_value] += 1 }
-    trips = trips.select { |_, card_count| card_count == 3 }
+    cards.each { |card| card_count[card.poker_value] += 1 }
+    trips = card_count.select { |_, count| count == 3 }
 
     return nil unless trips.count == 1
     set_value(:trips, trips)
@@ -45,10 +45,10 @@ class Hand
   end
 
   def find_quads
-    quads = Hash.new { |h,k| h[k] = 0 }
+    card_count = Hash.new { |h,k| h[k] = 0 }
 
-    cards.each { |card| quads[card.poker_value] += 1 }
-    quads = quads.select { |_, card_count| card_count == 4 }
+    cards.each { |card| card_count[card.poker_value] += 1 }
+    quads = card_count.select { |_, count| count == 4 }
 
     return nil unless quads.count == 1
     set_value(:quads, quads)
@@ -57,7 +57,7 @@ class Hand
 
   def find_straight
     card_values = cards.map(&:poker_value).sort
-    
+
     if card_values == (card_values.first..card_values.last).to_a
       set_value(:straight, card_values)
     elsif card_values == [2,3,4,5,14]
@@ -65,7 +65,7 @@ class Hand
     else
       return nil
     end
-    
+
     self.value
   end
 
@@ -74,14 +74,14 @@ class Hand
     case rank
     when :pair, :trips, :quads
       made_cards_value = made_cards.keys[0]
-      
+
       self.value[:rank] = HAND_RANK[rank]
       self.value[:made_cards] = [made_cards_value]
       self.value[:kicker_cards] = cards.map(&:poker_value)
       .reject { |value| value == made_cards_value}
     when :two_pair
       pair_value = made_cards.keys
-      
+
       self.value[:rank] = HAND_RANK[rank]
       self.value[:made_cards] = pair_value
       self.value[:kicker_cards] = cards.map(&:poker_value)
@@ -114,3 +114,4 @@ class Hand
 
 
 end
+#
