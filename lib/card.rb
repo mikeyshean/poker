@@ -17,6 +17,7 @@ class Card
     :king => 13,
     :ace => 14
   }
+  
 
   SUIT_STRINGS = {
     :clubs    => "♣",

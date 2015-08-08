@@ -1,13 +1,19 @@
 require 'deck'
 describe Deck do
-  let(:deck) {Deck.new}
+  subject(:deck) {Deck.new}
+  
   describe '#initialize' do
     it 'has 52 cards' do
       expect(deck.count).to eq(52)
     end
 
     it 'has all different cards' do
-      expect(deck.cards.uniq.count).to eq (52)
+      all_cards = deck.cards
+      .map { |card| [card.value, card.suit] }
+      .uniq
+      .count
+      
+      expect(all_cards).to eq (52)
     end
   end
 

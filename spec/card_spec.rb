@@ -1,8 +1,7 @@
 require 'card'
 
 describe Card do
-
-  let(:card) { Card.new(:ace, :spades)}
+  subject(:card) {Card.new(:ace, :spades) }
 
   describe "#value" do
     it "returns the value of the card" do
