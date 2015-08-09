@@ -13,7 +13,7 @@ describe Deck do
       .uniq
       .count
       
-      expect(all_cards).to eq (52)
+      expect(all_cards).to eq(52)
     end
   end
 
@@ -24,7 +24,7 @@ describe Deck do
     end
 
     it "returns the top 'n' cards from the deck" do
-      top_five = deck.cards.last(5)
+      top_five = deck.cards.first(5)
       expect(deck.take(5)).to eq(top_five)
     end
   end
