@@ -1,13 +1,14 @@
 class Player
   
-  attr_accessor :hand
+  attr_accessor :hand, :bankroll
   
-  def initialize
-    
+  def initialize(bankroll)
+    @bankroll = bankroll
   end
   
   def new_hand(hand)
-    self.hand = hand
+    @hand = hand
+    
   end
   
   def receive(cards)
@@ -24,6 +25,10 @@ class Player
     end
     
     hand.discard(indices)
+  end
+  
+  def fold
+    self.hand = nil
   end
 end
 

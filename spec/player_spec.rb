@@ -64,11 +64,16 @@ describe Player do
   end
     
   describe "#fold" do
-    it "returns cards back to the deck"
+    it "returns cards back to the deck" do
+      player1.hand = hand
+      player1.fold
+      expect(player1.hand).to be_nil
+    end
   end
   
   describe "#call" do
     it "reduces bankroll" 
+    it "cannot call if funds are insufficient"
   end
   
   describe "#raise" do
