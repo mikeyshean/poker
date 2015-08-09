@@ -26,6 +26,18 @@ class Hand
     @value = {}
   end
   
+  def values
+    cards.map(&:value)
+  end
+  
+  def discard(indices)
+    self.cards = cards.select { |card| !indices.include?(cards.index(card)) }
+  end
+  
+  def add_cards(cards)
+    self.cards += cards
+  end
+  
   def evaluate_hand
     find_straight_flush ||
     find_quads ||
